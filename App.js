@@ -1,20 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { NativeRouter } from 'react-router-native';
+import Main from './src/components/Main';
+import AuthStorageContext from './src/contexts/AuthContext';
+import UserContext from './src/contexts/UserContext';
+import AuthStorage from './src/utils/authStorage';
 
+
+const authStorage = new AuthStorage()
 export default function App() {
+  const [user, setUser] = useState()
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeRouter>
+      <UserContext.Provider value={{ user, setUser }}>
+        <AuthStorageContext.Provider value={authStorage}>
+          <Main />
+        </AuthStorageContext.Provider>
+      </UserContext.Provider>
+    </NativeRouter>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
