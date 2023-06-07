@@ -30,5 +30,5 @@
     "@babel/core": "^7.12.9"
   },
   "private": true,
-  "proxy": "http://10.1.135.24:5000"
+  "proxy": "https://shopsee.onrender.com"
 }
