@@ -55,15 +55,14 @@ const AddItemForm = ({ onSubmit }) => {
     );
 };
 
-const AddItem = () => {
+const AddItem = ({ navigation }) => {
     const initialValues = { name: '', price: '', image: '', stock: 0 }
-    const navigate = useNavigate()
 
     const OnSubmit = async (value) => {
         const { name, price, image, stock } = value;
         try {
             const response = ServerMethods.addnewItem({ name, price, image, stock })
-            navigate('/')
+            navigation.navigate('home')
             alert('Refresh to see changes')
         } catch (e) {
             console.log(e);

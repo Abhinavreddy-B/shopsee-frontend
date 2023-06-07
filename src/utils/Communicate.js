@@ -41,6 +41,21 @@ const addnewItem = async (item) => {
     return res.data
 }
 
-const ServerMethods = {resetToken,setToken, getAllItems,signIn,addnewItem,signUp}
+const AddToCart = async (id) => {
+    const config = {
+        headers: {Authorization: token}
+    }
+    const res = await axios.post('http://10.1.135.24:5000/api/user/cart',{id},config)
+    return res.data
+}
+
+const GetCart = async () => {
+    const config = {
+        headers: {Authorization: token}
+    }
+    const res = await axios.get('http://10.1.135.24:5000/api/user/cart',config)
+    return res.data
+}
+const ServerMethods = {resetToken,setToken, getAllItems,signIn,addnewItem,signUp, AddToCart, GetCart}
 
 export default ServerMethods

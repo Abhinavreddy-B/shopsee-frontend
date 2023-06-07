@@ -83,9 +83,8 @@ const SignInForm = ({ onSubmit, type, setType }) => {
   );
 };
 
-const SignUp = () => {
+const SignUp = ({ navigation }) => {
   const initialValues = { username: '', password: '',Name: '' }
-  const navigate = useNavigate()
   const [type,setType] = useState('user')
   
   const OnSubmit = async (value) => {
@@ -93,7 +92,7 @@ const SignUp = () => {
     try {
       await ServerMethods.signUp({ userName, password, Name },type)
       alert('Sign Up successfull, Login to continue')
-      navigate('/login')
+      navigation.goBack()
     } catch (e) {
       console.log(e);
       if(e.status === 401){
@@ -109,7 +108,7 @@ const SignUp = () => {
       <Formik initialValues={initialValues} onSubmit={OnSubmit} validationSchema={validationSchema}>
         {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} type={type} setType={setType} />}
       </Formik>
-      <Pressable onPress={() => navigate('/login')} style={styles.submitWrapper}>
+      <Pressable onPress={() => navigation.goBack()} style={styles.submitWrapper}>
         <Text style={styles.submitbutton}>Existing User? Login</Text>
       </Pressable>
     </View>

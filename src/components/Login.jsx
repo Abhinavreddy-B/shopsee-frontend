@@ -1,12 +1,14 @@
 import { Formik } from 'formik';
 import { Pressable, StyleSheet, View } from 'react-native';
 import FormikTextInput from './FormikTextInput';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
 import { useNavigate } from 'react-router-native';
 import { useState } from 'react';
 import theme from '../theme'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignUp from './SignUp';
 
 const styles = StyleSheet.create({
   submitWrapper: {
@@ -31,13 +33,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   togglePressable: {
-    flex: 1/2,
+    flex: 1 / 2,
     width: '50%',
     textAlign: 'center',
     paddingVertical: 10
   },
   togglePressableActive: {
-    flex: 1/2,
+    flex: 1 / 2,
     width: '50%',
     textAlign: 'center',
     paddingVertical: 10,
@@ -58,14 +60,14 @@ const validationSchema = yup.object().shape({
 });
 
 const SignInForm = ({ onSubmit, type, setType }) => {
-  
+
   return (
     <View>
       <View style={styles.toggleWrapper}>
-        <Pressable style={type === 'user'?styles.togglePressableActive:styles.togglePressable} onPress={() => {setType('user')}}>
+        <Pressable style={type === 'user' ? styles.togglePressableActive : styles.togglePressable} onPress={() => { setType('user') }}>
           <Text style={styles.toggleText}>User</Text>
         </Pressable>
-        <Pressable style={type === 'seller'?styles.togglePressableActive:styles.togglePressable} onPress={() => {setType('seller')}}>
+        <Pressable style={type === 'seller' ? styles.togglePressableActive : styles.togglePressable} onPress={() => { setType('seller') }}>
           <Text style={styles.toggleText}>Seller</Text>
         </Pressable>
       </View>
@@ -78,36 +80,51 @@ const SignInForm = ({ onSubmit, type, setType }) => {
   );
 };
 
-const Login = () => {
+const Stack = createNativeStackNavigator();
+
+const Login = ({ navigation }) => {
   const initialValues = { username: '', password: '' }
   const [signIn] = useSignIn()
-  const navigate = useNavigate()
-  const [type,setType] = useState('user')
-  
+  // const navigate = useNavigate()
+  const [type, setType] = useState('user')
+
   const OnSubmit = async (value) => {
     const { userName, password } = value;
     try {
-      await signIn({ userName, password },type);
-      navigate('/')
+      await signIn({ userName, password }, type);
+      navigation.navigate('home')
     } catch (e) {
       console.log(e);
-      if(e.status === 401){
+      if (e.status === 401) {
         console.log("Hello")
-      }else{
+      } else {
         alert(e)
       }
     }
   }
 
+  const MainPage = ({ navigation }) => {
+    return (
+      <View>
+        <Formik initialValues={initialValues} onSubmit={OnSubmit} validationSchema={validationSchema}>
+          {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} type={type} setType={setType} />}
+        </Formik>
+        <Pressable onPress={() => navigation.navigate('signup')} style={styles.submitWrapper}>
+          <Text style={styles.submitbutton}>New user? Sign Up for Free</Text>
+        </Pressable>
+      </View>
+    )
+  }
+
   return (
-    <View>
-      <Formik initialValues={initialValues} onSubmit={OnSubmit} validationSchema={validationSchema}>
-        {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} type={type} setType={setType} />}
-      </Formik>
-      <Pressable onPress={() => navigate('/signup')} style={styles.submitWrapper}>
-        <Text style={styles.submitbutton}>New user? Sign Up for Free</Text>
-      </Pressable>
-    </View>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Stack.Screen name='loginMain' component={MainPage}></Stack.Screen>
+      <Stack.Screen name='signup' component={SignUp}></Stack.Screen>
+    </Stack.Navigator>
   )
 };
 

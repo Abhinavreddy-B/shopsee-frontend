@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
 })
 const AppBar = () => {
     const { user } = useContext(UserContext)
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     return (
         <View style={styles.wrapper}>
-            <Pressable onPress={() => navigate('/')}>
+            {/* <Pressable onPress={() => navigate('/')}>
                 <Text style={styles.text}>
                     Shop
                 </Text>
@@ -52,7 +52,7 @@ const AppBar = () => {
                             Profile
                         </Text>
                     </Pressable>
-            }
+            } */}
         </View>
     );
 };

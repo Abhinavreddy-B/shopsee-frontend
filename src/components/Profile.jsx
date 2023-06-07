@@ -31,17 +31,17 @@ const styles = StyleSheet.create({
     }
 });
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
     const authStorage = useAuthStorage();
     const { user, setUser } = useContext(UserContext)
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const LogOut = async () => {
         await authStorage.removeAccessToken()
         ServerMethods.resetToken()
         setUser(undefined)
         alert('Log Out Succesfull')
-        navigate('/')
+        navigation.navigate('home')
     }
 
     return (
